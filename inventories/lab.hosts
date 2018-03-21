@@ -29,6 +29,10 @@ node2.redbeard28.intra
 [masters]
 master.redbeard28.intra
 
+[noadmins]
+masters
+nodes
+
 [admins]
 admin.redbeard28.intra
 

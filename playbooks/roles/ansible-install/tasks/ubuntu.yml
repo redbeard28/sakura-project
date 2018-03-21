@@ -1,0 +1,12 @@
+---
+- name: Copy files to root folder
+  copy:
+    src: "{{ item }}"
+    dest: /root
+    mode: u+rwx,g+rx,o-rx
+  with_items:
+    - repo.sh
+
+- name: Install ansible for ubuntu
+  shell: |
+    /root/repo.sh

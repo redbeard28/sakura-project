@@ -1,0 +1,10 @@
+---
+- hosts: noadmins
+  vars_files:
+      - secrets/{{ site }}-secrets.yml
+  roles:
+    - {role: role-git , tags: [prerequis,git] }
+    - {role: role-ntp , tags: [prerequis,ntpclient] }
+    - {role: role-resolvconf , tags: [prerequis,resolvconf] }
+    - {role: ansible-role-docker , tags: [prerequis,dockerinstall] }
+    - {role: ansible-install , tags: [prerequis,ansibleinstall] }
