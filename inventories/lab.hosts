@@ -1,0 +1,47 @@
+#########################################################
+#If you want all on the same server, please use :
+# ansible-playbook -i "localhost," -c localplaybook_name 
+#########################################################
+[all]
+admin.redbeard28.intra host_ip=10.10.1.15 private_hostname=admin host_coments="Admin Bastion and Bind NTP server"
+master.redbeard28.intra host_ip=10.10.1.160 private_hostname=master host_coments="kubernetes Master"
+node1.redbeard28.intra host_ip=10.10.1.161 private_hostname=node1 host_coments="kubernetes Node1"
+node2.redbeard28.intra host_ip=10.10.1.162 private_hostname=node2 host_coments="kubernetes Node2"
+
+[all:vars]
+site=lab
+
+[lab:children]
+nodes
+masters
+admins
+bindserver
+ntpserver
+
+#[npm_servers]
+#dashboard
+#nodered
+
+[nodes]
+node1.redbeard28.intra
+node2.redbeard28.intra
+
+[masters]
+master.redbeard28.intra
+
+[admins]
+admin.redbeard28.intra
+
+[bindserver]
+admin.redbeard28.intra
+
+[ntpserver]
+admin.redbeard28.intra
+
+#[front]
+
+#[dashboard]
+
+#[nodered]
+
+
