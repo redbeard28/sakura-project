@@ -29,7 +29,7 @@ node2.redbeard28.intra
 [masters]
 master.redbeard28.intra
 
-[noadmins]
+[noadmins:children]
 masters
 nodes
 
