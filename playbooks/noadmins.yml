@@ -1,9 +1,9 @@
 ---
-- hosts: noadmins
+- hosts: all
   vars_files:
       - secrets/{{ site }}-secrets.yml
   roles:
-    - {role: role-git , tags: [prerequis,git] }
+    - {role: dashenix , tags: [dashenix] }
     - {role: role-nodesntp , tags: [prerequis,ntpclient] }
     - {role: role-resolvconf , tags: [prerequis,resolvconf] }
     - {role: ansible-role-docker , tags: [prerequis,dockerinstall] }
