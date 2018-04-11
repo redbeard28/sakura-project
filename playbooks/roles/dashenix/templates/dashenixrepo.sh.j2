@@ -1,0 +1,11 @@
+#!/bin/bash
+
+export http_proxy={{ proxy_env.http_proxy }}
+export https_proxy={{ proxy_env.http_proxy }}
+
+git clone https://github.com/redbeard28/dockerfile-smashing.git "{{ dashenix_build_dir }}/tmp"
+rsync -av --progress "{{ dashenix_build_dir }}/tmp/files" "{{ role_path }}/"
+rsync -av --progress "{{ dashenix_build_dir }}/tmp/templates" "{{ role_path }}/"
+
+export http_proxy=
+export https_proxy=

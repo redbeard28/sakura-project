@@ -1,0 +1,11 @@
+---
+- name: Create {{ container_name }} Container
+  docker:
+    name: "{{ container_name }}"
+    image: "{{ docker_image }}"
+    ports:
+      - "{{ binding_port }}:{{ dashenix_container_port }}"
+    state: started
+
+- name: Ensure Docker {{ container_name }} Container started with binding port {{ binding_port }}:{{ dashenix_container_port }}
+  wait_for: port={{ binding_port }} delay=5 timeout=60

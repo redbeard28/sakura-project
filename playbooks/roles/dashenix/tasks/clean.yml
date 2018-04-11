@@ -1,0 +1,20 @@
+---
+- name: Remove old {{ container_name }} container if exist
+  docker:
+    name: "{{ container_name }}"
+    image: "{{ docker_registry_server }}/phenix/{{ docker_image }}"
+    state: absent
+
+- name: Remove old {{ container_name }} image if exist
+  shell: docker rmi {{ item }}
+  with_items:
+    - "{{ docker_registry_server }}/phenix/{{ docker_image }}"
+    - "{{ docker_image }}"
+  ignore_errors: True
+  changed_when: False
+
+- name: Remove {{ container_name }} building folder
+  file:
+    path: "{{ dashenix_build_dir }}"
+    state: absent
+

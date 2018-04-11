@@ -1,0 +1,50 @@
+---
+- name: Create {{ container_name }} building folder
+  file:
+    path: "{{ dashenix_build_dir }}/{{ item }}"
+    state: directory
+    mode: 0775
+    recurse: yes
+  with_items:
+    - jobs
+    - assets
+    - dashboards
+    - public
+    - widgets
+    - config
+    - clone
+
+- include: dashenix_clone.yml
+
+- include: server_status.yml
+  when: dashenix_widget_srv_status == 'True'
+
+- include: icinga.yml
+  when: dashenix_widget_icinga == 'True'
+
+- include: haproxy.yml
+  when: dashenix_widget_haproxy == 'True'
+  
+- name: Copy files to {{ container_name }} build folder
+  copy:
+    src: "{{ item }}"
+    dest: "{{ dashenix_build_dir }}/{{ item }}"
+    mode: u+rwx,g+rwx,o-rwx
+  with_items:
+    - widgets.txt
+    - gems.txt
+    - run.sh
+    
+- name: Generate Dockerfile to build {{ container_name }} image
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ dashenix_build_dir }}/{{ item }}"
+  with_items:
+    - Dockerfile
+
+- name: Generate the {{ container_name }} docker image in {{ dashenix_build_dir }}
+  docker_image:
+    path: "{{ dashenix_build_dir }}"
+    name: "{{ container_name }}"
+    tag: "{{ docker_image_version }}"
+    state: present

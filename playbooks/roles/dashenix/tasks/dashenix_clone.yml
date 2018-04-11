@@ -1,0 +1,13 @@
+---
+- name: Generate script to clone and merge widgets files
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ dashenix_build_dir }}/{{ item }}"
+  with_items:
+    - dashenixrepo.sh
+
+- name: Cloning widgets and dashboards from external repo
+  shell: |
+    chmod 755 "{{ dashenix_build_dir }}"/dashenixrepo.sh
+    "{{ dashenix_build_dir }}"/dashenixrepo.sh
+    

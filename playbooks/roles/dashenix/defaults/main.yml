@@ -1,0 +1,58 @@
+---
+### Docker BUILD ###
+docker_version: "1.7.1"
+docker_compose_version: "1.8.0"
+docker_new_deploy: 'False'
+dashenix_build_dir: "/appl/docker/{{ container_name }}"
+container_name: dashenix
+docker_image_version: "0.2"
+docker_image: "{{ container_name }}:{{ docker_image_version }}"
+timezone: "Europe/Paris"
+docker:
+   python_lib_list:
+     - { name: "docker-pycreds", version: "0.2.1" }
+     - { name: "docker-py", version: "{{ '1.4.0' if ansible_distribution_major_version == '6' else '1.10.6' }}" }
+     
+### Docker DEPLOY ###
+binding_port: 8099
+dashenix_container_port: 3030
+mail_destination: "{{ vault_mail_destination }}"
+monsiteweb: localhost
+monsitewebalias: docker.localhost
+smtp_relay: "{{ vault_smtp_srv }}"
+
+### DASHENIX OPTION and FOLDERS ###
+dashenix_folders_path:
+  - "{{ dashenix_build_dir }}/dashboards"
+  - "{{ dashenix_build_dir }}/jobs"
+  - "{{ dashenix_build_dir }}/config"
+  - "{{ dashenix_build_dir }}/widgets"
+  - "{{ dashenix_build_dir }}/assets"
+######### widget declaration #########
+dashenix_widget_srv_status: 'True'
+dashenix_widget_icinga: 'False'
+dashenix_widget_haproxy: 'True'
+haproxy_username: haproxy
+dashenix_auth_token: "{{ vault_dashenix_token }}"
+ha1_url: 
+ha2_url:
+haproxy_urls:
+  - urlname: Domoticz
+    urlgroup: domoticz
+  - urlname: Icinga
+    urlgroup: icinga_http
+serverstatus_servers:
+  - name: 'Domoticz'
+    url: 'http://127.0.0.18080'
+    method: 'http'
+    cr: ','
+  - name: 'icinga'
+    url: 'http://127.0.0.1'
+    method: 'http'
+    cr: ','
+  - name: 'Gateway'
+    url: 'http://127.0.0.1'
+    method: 'ping'
+    cr: ']'
+
+serverstatus_sheduleevery: 1m

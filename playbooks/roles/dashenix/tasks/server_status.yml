@@ -1,0 +1,16 @@
+---
+- name: Copy widgets files to {{ container_name }} build folder
+  copy: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: u+rwx,g+rwx,o-rwx
+  with_items:
+    - { src: "{{ role_path }}/files/widgets/server_status" , dest: "{{ dashenix_build_dir }}/widgets/" }
+    - { src: "{{ role_path }}/files/assets" , dest: "{{ dashenix_build_dir }}" }
+
+- name: Generate icinga.yml {{ container_name }} image
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ dashenix_build_dir }}/jobs/{{ item }}"
+  with_items:
+    - server_status.rb

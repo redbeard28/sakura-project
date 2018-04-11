@@ -1,0 +1,11 @@
+---
+- include: clean.yml
+  when: docker_new_deploy == 'True'
+  tags: [dashenix_build,dashenix_clean]
+
+- include: build.yml
+  when: docker_new_deploy == 'True'
+  tags: [dashenix_build]
+
+- include: deploy.yml
+  tags: [dashenix_deploy]

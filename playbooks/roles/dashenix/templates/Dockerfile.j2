@@ -1,0 +1,55 @@
+FROM ruby:2.3.1
+
+# AUTHOR...
+MAINTAINER Jeremie CUADRADO<redbeard28>
+
+# PROXY env
+ENV http_proxy {{ proxy_env.http_proxy }}
+ENV https_proxy {{ proxy_env.http_proxy }}
+ENV HTTP_PROXY {{ proxy_env.http_proxy }}
+ENV HTTPS_PROXY {{ proxy_env.http_proxy }}
+
+# Listen port
+ENV PORT {{ dashenix_container_port }}
+
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
+RUN apt-get update && \
+    apt-get -y install nodejs git vim && \
+    apt-get -y clean
+RUN gem install bundle smashing rest-client mqtt
+RUN mkdir /smashing && \
+    smashing new smashing && \
+    cd /smashing && \
+    bundle && \
+    ln -s /smashing/dashboards /dashboards && \
+    ln -s /smashing/jobs /jobs && \
+    ln -s /smashing/assets /assets && \
+    ln -s /smashing/lib /lib-smashing && \
+    ln -s /smashing/public /public && \
+    ln -s /smashing/widgets /widgets && \
+    mkdir /smashing/config && \
+    mv /smashing/config.ru /smashing/config/config.ru && \
+    ln -s /smashing/config/config.ru /smashing/config.ru && \
+    ln -s /smashing/config /config
+
+RUN mkdir -p /smashing/widgets/server_status
+RUN mkdir -p /smashing/widgets/haproxy_down_hosts
+RUN mkdir -p /smashing/widgets/icinga
+
+COPY dashboards/* /smashing/dashboards
+COPY jobs/* /smashing/jobs
+COPY assets/* /smashing/assets
+COPY widgets/server_status/* /smashing/widgets/server_status
+COPY widgets/haproxy_down_hosts/* /smashing/widgets/haproxy_down_hosts
+COPY widgets/icinga/* /smashing/widgets/icinga
+    
+COPY run.sh /
+
+#VOLUME ["/dashboards", "/jobs", "/lib-smashing", "/config", "/public", "/widgets", "/assets"]
+
+EXPOSE $PORT
+WORKDIR /smashing
+
+CMD ["/run.sh"]
+
+

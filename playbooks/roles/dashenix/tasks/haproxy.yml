@@ -1,0 +1,24 @@
+---
+- name: Generate config.yml for haproxy pass
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ dashenix_build_dir }}/jobs/{{ item }}"
+  with_items:
+    - config-haproxy.yml
+
+- name: Generate haproxy.rb job for haproxy pass
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ dashenix_build_dir }}/jobs/{{ item }}"
+  with_items:
+    - haproxy.rb
+
+- name: Copy widgets files to {{ container_name }} build folder
+  copy: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: u+rwx,g+rwx,o-rwx
+  with_items:
+    - { src: "{{ role_path }}/files/widgets/haproxy_down_hosts" , dest: "{{ dashenix_build_dir }}/widgets/" }
+    - { src: "{{ role_path }}/files/dashboards/haproxy.erb" , dest: "{{ dashenix_build_dir }}/dashboards" }
+
