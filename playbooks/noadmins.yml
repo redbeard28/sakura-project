@@ -6,5 +6,5 @@
     - {role: dashenix , tags: [dashenix] }
     - {role: role-nodesntp , tags: [prerequis,ntpclient] }
     - {role: role-resolvconf , tags: [prerequis,resolvconf] }
-    - {role: ansible-role-docker , tags: [prerequis,dockerinstall] }
+    - {role: docker_install , tags: [prerequis,dockerinstall] }
     - {role: ansible-install , tags: [prerequis,ansibleinstall] }
